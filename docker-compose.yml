@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: historicdb
+      POSTGRES_USER: vahid
+      POSTGRES_PASSWORD: vahid9188
+    ports:
+      - "5433:5432"   # host 5433, konteyner 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6380:6379"   # host 6380, konteyner 6379
+
+
+  opensearch:
+   image: opensearchproject/opensearch:2.17.0
+   environment:
+    - discovery.type=single-node
+    - plugins.security.disabled=true
+    - OPENSEARCH_INITIAL_ADMIN_PASSWORD=Vahid_9188
+    - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+   ports:
+    - "9200:9200"
+   ulimits:
+    memlock:
+      soft: -1
+      hard: -1
+
+
+volumes:
+  postgres_data:
