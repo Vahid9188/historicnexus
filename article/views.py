@@ -9,6 +9,8 @@ from article.models import Article
 from django.contrib import messages
 from .search_indexes import search_articles
 from django.core.cache import cache
+from django.conf.urls import handler500
+
 
 
 
@@ -113,3 +115,5 @@ def search_view(request):
     query = request.GET.get('q', '')
     results = search_articles(query) if query else []
     return render(request, 'search_results.html', {'query': query, 'results': results})
+
+
