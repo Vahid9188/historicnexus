@@ -19,6 +19,7 @@ from django.urls import path, include
 from article import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler500
 
 
 
@@ -41,3 +42,6 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler500 = 'historicnexus.views.custom_500'
