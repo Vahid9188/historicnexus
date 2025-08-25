@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<style>
+    .articles-container {
+        margin-top: 80px; /* başlığı yuxardan salır */
+        margin-bottom: 50px;
+        font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    .articles-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #4e342e;
+        font-weight: bold;
+    }
+
+    .list-group-item {
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        background: #fff7d6;
+        color: #4e342e;
+        font-weight: 500;
+        transition: 0.3s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .list-group-item:hover {
+        background: #ffd700;
+        color: #4e342e;
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        text-decoration: none;
+    }
+
+    .no-articles {
+        text-align: center;
+        color: #6d4c41;
+        font-style: italic;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container articles-container">
+    <h2>All Articles</h2>
+    <div class="list-group mt-3">
+        {% for article in articles %}
+            <a href="{% url 'article:articles_detail' article.pk %}" class="list-group-item list-group-item-action">
+                {{ article.title }}
+            </a>
+        {% empty %}
+            <p class="no-articles">No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

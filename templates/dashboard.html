@@ -1,0 +1,196 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<style>
+    /* Dashboard ümumi stil */
+    .dashboard-container {
+        min-height: 85vh;
+        padding-top: 100px;
+        background: #f8f4e3;
+        font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    .dashboard-sidebar {
+        background: #6d4c41;
+        color: #fdf6e3;
+        min-height: 70vh;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .dashboard-sidebar h4 {
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .dashboard-sidebar a {
+        display: block;
+        color: #fdf6e3;
+        margin: 10px 0;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .dashboard-sidebar a:hover {
+        color: #ffd700;
+    }
+
+    .dashboard-content {
+        background: #fff7d6;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        min-height: 70vh;
+    }
+
+    .dashboard-content h2 {
+        margin-bottom: 20px;
+        color: #4e342e;
+    }
+
+    .dashboard-card {
+        background: #f3e5ab;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: 0.3s;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .dashboard-card h5 {
+        font-weight: bold;
+        color: #6d4c41;
+    }
+
+    .add-article-btn {
+        display: inline-block;
+        background: #ffd700;
+        color: #4e342e;
+        font-weight: bold;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .add-article-btn:hover {
+        background: #e6c200;
+        color: #fff;
+    }
+
+    /* Table for Your Articles */
+    table.table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    table.table th, table.table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    table.table th {
+        background: #ffd700;
+        color: #4e342e;
+    }
+
+    table.table td a.btn {
+        margin-right: 5px;
+    }
+</style>
+
+<div class="container dashboard-container">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="dashboard-sidebar">
+                <h4>HistoricNexus</h4>
+                <a href="{% url 'index' %}"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="{% url 'article:articles_list' %}"><i class="fa-solid fa-scroll"></i> Articles</a>
+                <a href="{% url 'about' %}"><i class="fa-solid fa-feather-pointed"></i> About</a>
+                <a href="{% url 'contact' %}"><i class="fa-solid fa-envelope"></i> Contact</a>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-md-9">
+            <div class="dashboard-content">
+                <h2>Welcome, {{ request.user.username }}</h2>
+                <p>Here you can manage your articles, check stats, and explore historical insights.</p>
+
+                <!-- Yeni məqalə əlavə et düyməsi -->
+                <div class="mb-4">
+                    <a href="{% url 'article:addarticle' %}" class="add-article-btn">
+                        <i class="fa-solid fa-plus"></i> Add New Article
+                    </a>
+                </div>
+
+                <!-- Statistics -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="dashboard-card">
+                            <h5>Total Articles</h5>
+                            <p>{{ total_articles }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="dashboard-card">
+                            <h5>Pending Reviews</h5>
+                            <p>{{ pending_reviews }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="dashboard-card">
+                            <h5>Comments</h5>
+                            <p>{{ total_comments }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="dashboard-card">
+                            <h5>Profile Settings</h5>
+                            <p>Update your personal info</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Your Articles -->
+                <h3>Your Articles</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in user_articles %}
+                            <tr>
+                                <td>{{ article.title }}</td>
+                                <td>{{ article.status|capfirst }}</td>
+                                <td>{{ article.created_at|date:"Y-m-d" }}</td>
+                                <td>
+                                    <a href="{% url 'article:edit_article' article.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                                    <a href="{% url 'article:delete_article' article.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">No articles yet.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

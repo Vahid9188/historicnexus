@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+
+{% block body %}
+
+<div class="container" style="margin-top: 120px; text-align: center;">
+  <h1>Welcome to HistoricNexus</h1>
+  <p style="font-size: 1.2rem; margin-top: 20px;">
+    Dive into the fascinating world of history. Explore articles, stories, and insights 
+    that span centuries and civilizations. From ancient empires to modern milestones, 
+    HistoricNexus brings the past to life for students, enthusiasts, and curious minds alike.
+  </p>
+  <p style="font-size: 1.1rem; margin-top: 20px; color: #6d4c41;">
+    Discover the events that shaped our world, learn from the achievements of the past, 
+    and connect with the legacy of human civilization. Your journey through time starts here.
+  </p>
+  <a href="{% url 'article:articles_list' %}" class="btn btn-dark mt-4"><i class="fa-solid fa-scroll"></i> Explore Articles</a>
+</div>
+
+{% endblock body %}

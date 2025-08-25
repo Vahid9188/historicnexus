@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<style>
+    /* Login səhifəsi üçün tarixi/neutal stil */
+    body {
+        background-color: #f8f4e3; /* navbar fonuna uyğun açıq bej */
+        font-family: Georgia, 'Times New Roman', serif;
+        color: #333;
+    }
+
+    .login-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 12px;
+        background-color: #fff7e6; /* tarixi açıq bej */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 25px 30px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .login-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+    .login-card h3 {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4e342e; /* navbar rənginə uyğun qəhvəyi */
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    input.form-control {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        padding: 10px 12px;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input.form-control:focus {
+        border-color: #6d4c41; /* navbar rənginə uyğun vurğu */
+        box-shadow: 0 0 5px rgba(109,76,65,0.2);
+        outline: none;
+    }
+
+    .btn-dark {
+        border-radius: 8px;
+        background-color: #6d4c41; /* navbar vurğu rəngi */
+        border: none;
+        padding: 10px 15px;
+        font-weight: 500;
+        color: #fff;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-dark:hover {
+        background-color: #4e342e;
+        transform: translateY(-1px);
+    }
+
+    .alert-custom {
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .text-center a {
+        color: #6d4c41;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .text-center a:hover {
+        color: #4e342e;
+        text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+        .login-card {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="container login-container">
+    <div class="card login-card">
+        <h3>Login</h3>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-custom" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="mb-3">
+                <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="text-danger small">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="text-danger small">
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100">Login</button>
+
+            <div class="text-center mt-3">
+                <span>Don't have an account? </span>
+                <a href="{% url 'user:register' %}">Register</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock body %}

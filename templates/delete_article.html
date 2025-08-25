@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<style>
+    .delete-article-container {
+        min-height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f8f4e3;
+        font-family: Georgia, 'Times New Roman', serif;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .delete-article-card {
+        width: 100%;
+        max-width: 600px;
+        background: #fff7d6;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .delete-article-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .delete-article-card h3 {
+        margin-bottom: 25px;
+        font-weight: bold;
+        color: #4e342e;
+    }
+
+    .btn-delete {
+        background: #d9534f;
+        color: #fff;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: bold;
+        margin-right: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-delete:hover {
+        background: #c12e2a;
+    }
+
+    .btn-cancel {
+        background: #ccc;
+        color: #4e342e;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-cancel:hover {
+        background: #bbb;
+        color: #000;
+    }
+</style>
+
+<div class="delete-article-container">
+    <div class="delete-article-card">
+        <h3>Delete Article</h3>
+        <form method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete "<strong>{{ article.title }}</strong>"?</p>
+            <button type="submit" class="btn-delete">Yes, Delete</button>
+            <a href="{% url 'article:dashboard' %}" class="btn-cancel">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

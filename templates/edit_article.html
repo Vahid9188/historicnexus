@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<style>
+    .edit-article-container {
+        min-height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f8f4e3;
+        font-family: Georgia, 'Times New Roman', serif;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .edit-article-card {
+        width: 100%;
+        max-width: 700px;
+        background: #fff7d6;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        transition: 0.3s;
+    }
+
+    .edit-article-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .edit-article-card h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: bold;
+        color: #4e342e;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: #6d4c41;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 100%;
+        box-sizing: border-box;
+        transition: 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #ffd700;
+        box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        outline: none;
+    }
+
+    .btn-update {
+        background: #6d4c41;
+        color: #fdf6e3;
+        border-radius: 10px;
+        padding: 10px 20px;
+        width: 100%;
+        font-weight: bold;
+        transition: 0.3s;
+        margin-top: 15px;
+    }
+
+    .btn-update:hover {
+        background: #4e342e;
+        color: #ffd700;
+    }
+
+    .btn-cancel {
+        background: #ccc;
+        color: #4e342e;
+        border-radius: 10px;
+        padding: 10px 20px;
+        width: 100%;
+        margin-top: 10px;
+        font-weight: bold;
+        text-align: center;
+        display: inline-block;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-cancel:hover {
+        background: #bbb;
+        color: #000;
+    }
+
+    .text-danger {
+        margin-top: 5px;
+        font-size: 0.9em;
+    }
+
+    .alert {
+        margin-bottom: 20px;
+    }
+    .current-image {
+        max-height: 200px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="edit-article-container">
+    <div class="edit-article-card">
+        <h2>Edit Article: {{ article.title }}</h2>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.title.label }}</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="text-danger">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.content.label }}</label>
+                {{ form.content }}
+                {% if form.content.errors %}
+                    <div class="text-danger">{{ form.content.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Show current image if exists -->
+            {% if article.image %}
+                <div class="mb-3">
+                    <label class="form-label">Current Image:</label><br>
+                    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="current-image">
+                </div>
+            {% endif %}
+
+            <!-- Image upload field -->
+            <div class="mb-3">
+                <label class="form-label">{{ form.image.label }}</label>
+                {{ form.image }}
+                {% if form.image.errors %}
+                    <div class="text-danger">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn-update">Update Article</button>
+            <a href="{% url 'article:dashboard' %}" class="btn-cancel">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

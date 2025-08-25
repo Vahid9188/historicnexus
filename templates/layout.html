@@ -1,0 +1,231 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HistoricNexus</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'images/historicnexus.ico' %}" type="image/x-icon">
+  <link rel="icon" href="{% static 'images/historicnexus.ico' %}" type="image/x-icon">
+
+  <!-- Bootstrap + Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <style>
+    /* ---------------- Navbar ---------------- */
+    .navbar-custom {
+      background: linear-gradient(90deg, #4e342e, #6d4c41, #a1887f);
+    }
+    .navbar-brand {
+      color: #f3e5ab;
+      font-weight: bold;
+      font-size: 1.5rem;
+      font-family: 'Georgia', serif;
+    }
+    .navbar-brand:hover { color: #fff7d6; }
+    .navbar-nav .nav-link {
+      color: #fdf6e3;
+      font-weight: 500;
+      font-family: 'Georgia', serif;
+      transition: 0.3s;
+    }
+    .navbar-nav .nav-link:hover { color: #ffd700; }
+    .custom-toggler { border: none; background: transparent; }
+    .custom-toggler span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      margin: 5px;
+      background: #fff;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
+    /* ---------------- Body ---------------- */
+    body {
+      background: #f8f4e3;
+      font-family: Georgia, 'Times New Roman', serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ---------------- Dark Mode ---------------- */
+    body.dark-mode {
+      background-color: #2b2b2b;
+      color: #fdf6e3;
+    }
+    body.dark-mode a {
+      color: #ffd700;
+    }
+    body.dark-mode a:hover {
+      color: #fff7d6;
+    }
+
+    /* Containers, cards, list-group, forms */
+    body.dark-mode .container,
+    body.dark-mode .card,
+    body.dark-mode .edit-article-card,
+    body.dark-mode .list-group-item,
+    body.dark-mode .dashboard-content,
+    body.dark-mode .content-container {
+      background-color: #3a3a3a;
+      color: #fdf6e3;
+    }
+
+    /* Hover */
+    body.dark-mode .list-group-item:hover,
+    body.dark-mode .btn:hover,
+    body.dark-mode .btn-update:hover,
+    body.dark-mode .btn-cancel:hover {
+      background-color: #4e342e;
+      color: #ffd700;
+    }
+
+    /* Forms */
+    body.dark-mode .form-control {
+      background-color: #555;
+      color: #fdf6e3;
+      border-color: #888;
+    }
+    body.dark-mode .form-control:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    }
+
+    /* Alerts */
+    .alert { margin-bottom: 20px; }
+
+    /* Container spacing */
+    .content-container { padding-top: 100px; padding-bottom: 50px; }
+
+    /* List-group hover */
+    .list-group-item:hover { background-color: #f3e5ab; cursor: pointer; }
+
+    /* Buttons */
+    .btn-update {
+      background: #6d4c41;
+      color: #fdf6e3;
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 10px;
+    }
+    .btn-update:hover { background: #4e342e; color: #ffd700; }
+    .btn-cancel {
+      background: #ccc;
+      color: #4e342e;
+      border-radius: 10px;
+      width: 100%;
+      margin-top: 10px;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn-cancel:hover { background: #bbb; color: #000; }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'index' %}"><i class="fa-solid fa-landmark"></i> HistoricNexus</a>
+      <button class="custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav ms-auto text-center">
+          {% if request.user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'article:dashboard' %}"><i class="fa-solid fa-tachometer-alt"></i> Dashboard</a></li>
+          {% endif %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'article:articles_list' %}"><i class="fa-solid fa-scroll"></i> Articles</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'about' %}"><i class="fa-solid fa-feather-pointed"></i> About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+
+          <!-- Dark/Light Toggle -->
+          <li class="nav-item ms-3">
+            <button class="btn btn-sm btn-outline-light" id="darkModeToggle" title="Toggle Dark/Light Mode">
+              <i class="fa-solid fa-moon" id="darkModeIcon"></i>
+            </button>
+          </li>
+
+          {% if request.user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'user:logout' %}"><i class="fa-solid fa-right-from-bracket"></i></a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'user:login' %}"><i class="fa-solid fa-right-to-bracket"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user:register' %}"><i class="fa-solid fa-user-plus"></i></a></li>
+          {% endif %}
+
+          <!-- Search -->
+          <li class="nav-item ms-3">
+            <form class="d-flex" method="GET" action="{% url 'article:search' %}">
+              <input class="form-control form-control-sm me-2" type="search" placeholder="Search..." aria-label="Search"   name="q">
+              <button class="btn btn-outline-light btn-sm" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Messages -->
+  {% if messages %}
+    <div class="container content-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Page Content -->
+  <div class="container content-container">
+    {% block body %}{% endblock %}
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Dark/Light Mode Script with Icon -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggleBtn = document.getElementById('darkModeToggle');
+      const darkIcon = document.getElementById('darkModeIcon');
+      const body = document.body;
+
+      // Initialize theme
+      if(localStorage.getItem('theme') === 'dark'){
+        body.classList.add('dark-mode');
+        darkIcon.classList.replace('fa-moon','fa-sun');
+      } else {
+        body.classList.remove('dark-mode');
+        darkIcon.classList.replace('fa-sun','fa-moon');
+      }
+
+      // Toggle theme
+      toggleBtn.addEventListener('click', function() {
+        body.classList.toggle('dark-mode');
+        if(body.classList.contains('dark-mode')){
+          localStorage.setItem('theme', 'dark');
+          darkIcon.classList.replace('fa-moon','fa-sun');
+        } else {
+          localStorage.setItem('theme', 'light');
+          darkIcon.classList.replace('fa-sun','fa-moon');
+        }
+      });
+    });
+  </script>
+ <body class="d-flex flex-column min-vh-100">
+    <!-- Footer -->
+    <footer class="text-center py-3 mt-auto bg-dark text-light border-top">
+        <p class="mb-0">&copy; 2025 HistoricNexus. All rights reserved.</p>
+    </footer>
+
+
+</body>
+</html>

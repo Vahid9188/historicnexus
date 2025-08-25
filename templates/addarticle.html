@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% load widget_tweaks %}
+
+{% block body %}
+<style>
+    .add-article-container {
+        min-height: 85vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f8f4e3;
+        font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    .add-article-card {
+        width: 100%;
+        max-width: 700px;
+        background: #fff7d6;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .add-article-card h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: bold;
+        color: #4e342e;
+    }
+
+    .btn-publish {
+        background: #6d4c41;
+        color: #fdf6e3;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-publish:hover {
+        background: #4e342e;
+        color: #ffd700;
+    }
+</style>
+
+<div class="add-article-container">
+    <div class="add-article-card">
+        <h2>Add New Article</h2>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Form -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Title -->
+            <div class="mb-3">
+                <label class="form-label">{{ form.title.label }}</label>
+                {{ form.title|add_class:"form-control" }}
+                {% if form.title.errors %}
+                    <div class="text-danger small">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Content -->
+            <div class="mb-3">
+                <label class="form-label">{{ form.content.label }}</label>
+                {{ form.content|add_class:"form-control" }}
+                {% if form.content.errors %}
+                    <div class="text-danger small">{{ form.content.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Image -->
+            <div class="mb-3">
+                <label class="form-label">{{ form.image.label }}</label>
+                {{ form.image|add_class:"form-control" }}
+                {% if form.image.errors %}
+                    <div class="text-danger small">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- File -->
+            <div class="mb-3">
+                <label class="form-label">{{ form.file.label }}</label>
+                {{ form.file|add_class:"form-control" }}
+                {% if form.file.errors %}
+                    <div class="text-danger small">{{ form.file.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-publish w-100">Publish Article</button>
+        </form>
+    </div>
+</div>
+{% endblock body %}

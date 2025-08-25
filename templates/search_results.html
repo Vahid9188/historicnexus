@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container mt-5">
+    <h2>Search Results for "{{ query }}"</h2>
+    <div class="list-group mt-3">
+        {% for article in results %}
+            <a href="{% url 'article:articles_detail' article.id %}" class="list-group-item list-group-item-action">
+                {{ article.title }}
+            </a>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
